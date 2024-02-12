@@ -7,22 +7,20 @@ class ListTileCustom extends StatelessWidget {
   Widget build(BuildContext context) {
     var bodyTheme = Theme.of(context).textTheme;
     return ListTile(
-    leading:
-    SvgPicture.asset(
-      "assets/goggles.svg",
-      height: 35,
-      width: 35,
-    )
-    ,
-    title: Text(
-    "User",
-    style: bodyTheme.bodyMedium,
-    ),
-    subtitle: Text(
-    "200",
-    style: bodyTheme.labelMedium,
-    )
-    ,
+      leading: SvgPicture.asset(
+        "assets/goggles.svg",
+        height: 35,
+        width: 35,
+      ),
+      trailing: Icon(Icons.arrow_forward_ios),
+      title: Text(
+        "User",
+        style: bodyTheme.bodyMedium,
+      ),
+      subtitle: Text(
+        "200",
+        style: bodyTheme.labelMedium,
+      ),
     );
   }
 }
