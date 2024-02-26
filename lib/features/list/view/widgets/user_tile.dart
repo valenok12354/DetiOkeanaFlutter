@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ListTileCustom extends StatelessWidget {
-  const ListTileCustom({super.key});
+class ListTileCustomWidget extends StatelessWidget {
+  const ListTileCustomWidget({super.key});
 
   Widget build(BuildContext context) {
     var bodyTheme = Theme.of(context).textTheme;
+    const userName = "User1";
     return ListTile(
       leading: SvgPicture.asset(
         "assets/goggles.svg",
@@ -13,8 +14,14 @@ class ListTileCustom extends StatelessWidget {
         width: 35,
       ),
       trailing: Icon(Icons.arrow_forward_ios),
+      onTap: () {
+        Navigator.of(context).pushNamed(
+            "/user",
+            arguments: userName
+        );
+      },
       title: Text(
-        "User",
+        userName,
         style: bodyTheme.bodyMedium,
       ),
       subtitle: Text(
