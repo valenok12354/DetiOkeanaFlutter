@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:instructor_dairy/features/bloc/list_bloc.dart';
+import 'package:instructor_dairy/features/list/view/widgets/user_tile.dart';
 import 'package:instructor_dairy/repositories/cripto_coins/abstact_coins_repo.dart';
 import '../../../repositories/cripto_coins/models/crypto_coin.dart';
-import 'widgets/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserListScreen extends StatefulWidget {
   const UserListScreen({super.key, required this.title});
@@ -14,11 +18,13 @@ class UserListScreen extends StatefulWidget {
 
 class _UserListScreenState extends State<UserListScreen> {
   List<CryptoCoin>? _cryptoCoinsList;
+  final cryptoBloc = ListBloc(GetIt.I<AbstractCoinsRepo>());
 
   @override
   void initState() {
     /// во время инициализации грузим запрос
-    loadCoins();
+    // loadCoins();
+    cryptoBloc.add(LoadList());
     super.initState();
   }
 
@@ -28,19 +34,45 @@ class _UserListScreenState extends State<UserListScreen> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: (_cryptoCoinsList == null)
-          ? Center(child: const CircularProgressIndicator())
-          : ListView.separated(
-          separatorBuilder: (context, index) => Divider(),
-          itemCount: _cryptoCoinsList!.length,
-          itemBuilder: (context, i) =>
-              ListTileCustomWidget(coin: _cryptoCoinsList![i])
-      ),
+      body: RefreshIndicator(
+      onRefresh: () async {
+        final completer = Completer();
+      cryptoBloc.add(LoadList(completer: completer));
+        completer.future;
+      },
+      child: BlocBuilder<ListBloc, ListState>(
+        bloc: cryptoBloc,
+        builder: (context, state) {
+          if (state is ListLoaded) {
+            print(state);
+           return ListView.separated(
+                  separatorBuilder: (context, index) => Divider(),
+                  itemCount: state.coinsList.length,
+                  itemBuilder: (context, i) =>
+                       ListTileCustomWidget(coin: state.coinsList![i])
+              );
+          }
+          if (state is ListLoadingFailure) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(state.exception.toString() ?? "Error"),
+                  SizedBox(height: 30),
+                  OutlinedButton(
+                      onPressed: (){
+                        cryptoBloc.add(LoadList());
+                      },
+                      child: Text("Попробуйте снова")
+                  )
+                ],
+              )
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        }
+      ),)
     );
-  }
-  /// дергаем метод
-  Future<void> loadCoins() async {
-    _cryptoCoinsList = await GetIt.I<AbstractCoinsRepo>().getCoinsList();
-    setState(() {});
   }
 }
