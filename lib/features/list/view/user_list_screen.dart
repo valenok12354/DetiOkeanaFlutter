@@ -44,7 +44,6 @@ class _UserListScreenState extends State<UserListScreen> {
         bloc: cryptoBloc,
         builder: (context, state) {
           if (state is ListLoaded) {
-            print(state);
            return ListView.separated(
                   separatorBuilder: (context, index) => Divider(),
                   itemCount: state.coinsList.length,
