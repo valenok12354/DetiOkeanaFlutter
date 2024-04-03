@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:get_it/get_it.dart';
 import 'package:instructor_dairy/repositories/cripto_coins/abstact_coins_repo.dart';
 import 'package:meta/meta.dart';
 

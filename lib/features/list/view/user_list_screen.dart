@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/instance_manager.dart';
 import 'package:get_it/get_it.dart';
+import 'package:instructor_dairy/features/authentication/models/user_model.dart';
+import 'package:instructor_dairy/features/authentication/models/user_repository.dart';
 import 'package:instructor_dairy/features/bloc/list_bloc.dart';
 import 'package:instructor_dairy/features/list/view/widgets/user_tile.dart';
 import 'package:instructor_dairy/repositories/cripto_coins/abstact_coins_repo.dart';
@@ -48,7 +51,7 @@ class _UserListScreenState extends State<UserListScreen> {
                   separatorBuilder: (context, index) => Divider(),
                   itemCount: state.coinsList.length,
                   itemBuilder: (context, i) =>
-                       ListTileCustomWidget(coin: state.coinsList![i])
+                       ListTileCustomWidget(coin: state.coinsList![i]),
               );
           }
           if (state is ListLoadingFailure) {
@@ -71,7 +74,19 @@ class _UserListScreenState extends State<UserListScreen> {
           }
           return const Center(child: CircularProgressIndicator());
         }
-      ),)
+      ),),
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text("Добавить пользователя"),
+        onPressed: () {
+          final user = UserModel(fullName: "Ïvan", email: "ëmail", password: "pass", phoneNo: "990");
+          createHardCoreUser(user);
+      },
+      ),
     );
   }
+}
+
+final userRepo = Get.put(UserRepository());
+void createHardCoreUser(UserModel user) {
+  userRepo.createUser(user);
 }
