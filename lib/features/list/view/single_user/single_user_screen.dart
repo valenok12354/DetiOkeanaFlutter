@@ -19,23 +19,13 @@ class _SingleUserScreenState extends State<SingleUserScreen> {
   //   super.initState();
   //   textEditController.addListener(getNametoAppBar);
   // }
-  // void getNametoAppBar() {
-  //   final text = textEditController.text;
-  //   print(text);
-  // }
-  @override
-  void didChangeDependencies() {
-    final args = ModalRoute.of(context)?.settings.arguments;
-    assert(args != null && args is String, "You must provide smth");
-    userName = args as String;
-    setState(() {
-    });
-    super.didChangeDependencies();
+   String getNametoAppBar()  {
+    return textEditControllerName.text + "  " + textEditControllerSurname.text;
   }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(textEditControllerName.text + "  " + textEditControllerSurname.text)),
+      appBar: AppBar(title: Text(getNametoAppBar())),
      body:  Padding(
     padding: const EdgeInsets.all(16),
     child: Column(
@@ -56,6 +46,7 @@ class _SingleUserScreenState extends State<SingleUserScreen> {
             padding: EdgeInsets.symmetric(horizontal: 8, vertical: 16),
             child: TextField(
               controller: textEditControllerSurname,
+              onTapOutside: (event) => FocusScope.of(context).unfocus(),
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
                 labelText: "Фамилия",
@@ -70,11 +61,17 @@ class _SingleUserScreenState extends State<SingleUserScreen> {
         label: Text("Добавить ученика"),
         onPressed: () {
           setState(() {
-            textEditControllerName.text;
-            textEditControllerSurname.text;
             final user = UserModel(name:  textEditControllerName.text, surname: textEditControllerSurname.text);
             createHardCoreUser(user);
           });
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: Text("Ученик добавлен"),
+              );
+            },
+          );
         },
       ),
     );

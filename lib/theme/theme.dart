@@ -27,4 +27,8 @@ final darkTheme = ThemeData(
       bodyMedium: bodyMediumTextStyle,
       labelSmall: labelSmallTextStyle
   ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    foregroundColor: Colors.white,
+    backgroundColor: Colors.cyan
+  )
 );

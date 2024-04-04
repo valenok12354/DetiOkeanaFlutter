@@ -29,7 +29,7 @@ class _UserListScreenState extends State<UserListScreen> {
   void initState() {
     /// во время инициализации грузим запрос
     // loadCoins();
-    cryptoBloc.add(LoadList());
+    // cryptoBloc.add(LoadList());
     super.initState();
   }
 
